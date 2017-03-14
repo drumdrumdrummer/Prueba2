@@ -1,0 +1,109 @@
+
+Este ejercicio trata de algunas variantes de importación dependiendo del tipo
+de tablas que haya. En concreto:
+
+- tablas sin clave
+- tablas con clave del tipo carácter
+- tablas con clave compuesta
+
+También tiene un apartado de importar bd completa.
+
+Deben tenerse dos terminales abiertas, una con mysql y otra con el so
+
+
+1- Entrar en mysql sin conectarse a ninguna bd
+
+2- Mostrar las bd existentes
+
+3- Cambiar a test
+
+4- Crear la tabla empleados sin clave primaria y con las siguientes 
+especificaciones:
+
+Tabla empleados
+---------------
+
+codigo 		int(4)
+nombre 		char(50)
+categoria 	char(10)
+salario 	float
+
+5- Insertar 3 filas, validar la transacción (commit)
+
+6- Desde la ventana del so listar desde sqoop las bases de datos
+
+7- Desde la ventana del so listar desde sqoop las tablas de la bd test
+
+8- Importar la tabla test al hdfs
+
+9- Comprobar que falla porque no hay clave primaria
+
+10- Importarla con la opción -m 1 (una sola tarea maper)
+
+11- Verlo en la web
+
+12- Desde el terminal de mysql crear la tabla bonos.
+Observar que la pk es del tipo carácter.
+
+Tabla bonos
+-----------
+
+mes		char(20) clave primaria
+porcentaje	int(2)
+
+13- Insertar 3 filas, validar transacción
+
+14- Desde el terminal del so importarla sin la opción -m
+
+15- Observar que lanza 4 tareas map. Verlo en la web. 
+Ver distribución de datos en los ficheros en la web.
+
+16- Desde el terminal de mysql crear la tabla compuesta.
+Observar que la pk está formada por dos campos.
+
+Tabla compuesta
+---------------
+
+campo1		int(2) clave primaria
+campo2 		int(2) clave primaria
+campo3		char(10)
+
+17- Insertar 3 filas, validar transacción
+
+18- Desde el terminal del so importarla sin la opción -m
+
+19- Observar que lanza 1 tareas map.
+Observar que el job avisa de que va a ignorar la segunda columna
+de la pk.
+Ver distribución de datos en los ficheros en la web.
+
+
+20- Importar toda la bd test con:
+
+sqoop import-all-tables \
+--connect jdbc:mysql://localhost/test \
+--username training --password training
+
+
+Para ello:
+- Listar primero desde sqoop las tablas de esta bd 
+- Puesto que la importación se hace de cada una de las tablas de la bd,
+  borrar antes todos los directorios correspondientes, esto es:
+  empleados, bonos, compuesta (esto es, la importación no se hace creando
+  un directorio test y de ahí todas sus tablas)
+- Importar todas las tablas de la bd test.
+
+Verlo en la web.
+
+OBSERVAR
+********
+
+1) Al importar toda la bd es necesario borrar antes todos los directorios creados
+porque importará cada tabla en uno y como ya existen dará error.
+Esto es, no crea un directorio "test"
+
+2) Crea 3 jobs, uno por tabla
+
+3) Escoge como carácter delimitador la , (se ve en la web)
+
+4) Es posible que si hay algún error no haga todas las importaciones.
